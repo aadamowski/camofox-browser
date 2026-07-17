@@ -71,4 +71,18 @@ describe('loadConfig', () => {
       VNC_BIND: '0.0.0.0',
     });
   });
+
+  test('configures network interface binding', () => {
+    delete process.env.CAMOFOX_NET_INTERFACE;
+    expect(loadConfig().host).toBe('');
+
+    process.env.CAMOFOX_NET_INTERFACE = '127.0.0.1';
+    expect(loadConfig().host).toBe('127.0.0.1');
+
+    process.env.CAMOFOX_NET_INTERFACE = '0.0.0.0';
+    expect(loadConfig().host).toBe('0.0.0.0');
+
+    process.env.CAMOFOX_NET_INTERFACE = '192.168.1.100';
+    expect(loadConfig().host).toBe('192.168.1.100');
+  });
 });

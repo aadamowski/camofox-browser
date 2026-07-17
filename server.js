@@ -6031,7 +6031,8 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 // Fly's auto_stop_machines=false + min_machines_running=2 handles scaling.
 
 const PORT = CONFIG.port;
-pluginEvents.emit('server:starting', { port: PORT });
+const HOST = CONFIG.host;
+pluginEvents.emit('server:starting', { port: PORT, host: HOST });
 
 // Load plugins before starting the server
 const pluginCtx = {
@@ -6067,7 +6068,7 @@ mountDocs(app);
 // --- Sentry Express error handler (after all routes, before app.listen) ---
 setupSentryErrorHandler(app);
 
-const server = app.listen(PORT, async () => {
+const server = app.listen(PORT, HOST, async () => {
   startMemoryReporter();
   refreshActiveTabsGauge();
   refreshTabLockQueueDepth();
